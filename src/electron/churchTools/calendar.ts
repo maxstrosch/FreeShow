@@ -35,9 +35,9 @@ export function getChurchToolsCalendarStatus() {
 }
 
 export function saveChurchToolsCalendarSettings(input: ChurchToolsCalendarSettings) {
-    const baseUrl = String(input.baseUrl || "").trim().replace(/\\/+$/, "").replace(/\\/api$/i, "")
+    const baseUrl = String(input.baseUrl || "").trim().replace(/\/+$/, "").replace(/\/api$/i, "")
     const token = String(input.token || "").trim()
-    if (!/^https?:\\/\\//i.test(baseUrl)) return { success: false, error: "Bitte eine gültige ChurchTools-URL eingeben." }
+    if (!/^https?:\/\//i.test(baseUrl)) return { success: false, error: "Bitte eine gültige ChurchTools-URL eingeben." }
     if (!token) return { success: false, error: "Bitte einen API-Token eingeben." }
 
     // Credentials are kept only in the non-portable ACCESS store. Never send them back to the renderer.
