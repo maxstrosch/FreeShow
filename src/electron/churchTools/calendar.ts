@@ -1,3 +1,4 @@
+import { safeStorage } from "electron"
 import { _store } from "../data/store"
 
 export interface ChurchToolsCalendarSettings {
@@ -16,7 +17,16 @@ const ACCESS_KEY = "churchToolsCalendar"
 
 function getSettings(): ChurchToolsCalendarSettings | null {
     const value = _store.ACCESS?.get(ACCESS_KEY) as ChurchToolsCalendarSettings | undefined
-    return value?.baseUrl && value?.token ? value : null
+    if (!value?.baseUrl || !value?.token) return null
+    try {
+        const token = value.token.startsWith("encrypted:")
+            ? safeStorage.decryptString(Buffer.from(value.token.slice(10), "base64"))
+            : value.token
+        return { ...value, token }
+    } catch (error) {
+        console.error("Could not decrypt ChurchTools credentials:", error)
+        return null
+    }
 }
 
 export function getChurchToolsCalendarStatus() {
@@ -31,7 +41,14 @@ export function saveChurchToolsCalendarSettings(input: ChurchToolsCalendarSettin
     if (!token) return { success: false, error: "Bitte einen API-Token eingeben." }
 
     // Credentials are kept only in the non-portable ACCESS store. Never send them back to the renderer.
-    _store.ACCESS?.set(ACCESS_KEY, { baseUrl, token })
+    try {
+        const storedToken = safeStorage.isEncryptionAvailable()
+            ? "encrypted:" + safeStorage.encryptString(token).toString("base64")
+            : token
+        _store.ACCESS?.set(ACCESS_KEY, { baseUrl, token: storedToken })
+    } catch {
+        return { success: false, error: "Die sichere lokale Speicherung ist auf diesem System nicht verfügbar." }
+    }
     return { success: true }
 }
 
