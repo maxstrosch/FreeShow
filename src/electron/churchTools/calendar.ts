@@ -19,9 +19,8 @@ function getSettings(): ChurchToolsCalendarSettings | null {
     const value = _store.ACCESS?.get(ACCESS_KEY) as ChurchToolsCalendarSettings | undefined
     if (!value?.baseUrl || !value?.token) return null
     try {
-        const token = value.token.startsWith("encrypted:")
-            ? safeStorage.decryptString(Buffer.from(value.token.slice(10), "base64"))
-            : value.token
+        if (!value.token.startsWith("encrypted:") || !safeStorage.isEncryptionAvailable()) return null
+        const token = safeStorage.decryptString(Buffer.from(value.token.slice(10), "base64"))
         return { ...value, token }
     } catch (error) {
         console.error("Could not decrypt ChurchTools credentials:", error)
@@ -84,6 +83,7 @@ function appointmentParts(raw: any) {
         start,
         end: end || start,
         information: appointment?.information || base?.information || "",
+        allDay: !!base?.allDay,
         location: appointment?.location?.name || appointment?.location || "",
         date: start.slice(0, 10)
     }
@@ -127,7 +127,7 @@ export async function syncChurchToolsCalendar(range?: { from?: string; to?: stri
                 location: item.location,
                 from: item.start,
                 to: item.end,
-                time: true,
+                time: !item.allDay,
                 repeat: false,
                 origin,
                 churchTools: { calendarId: item.calendarId, appointmentId: item.id, eventId, date: item.date }
