@@ -37,7 +37,6 @@
         const result = await requestMain(Main.CHURCHTOOLS_CALENDAR_SYNC, {})
         churchToolsBusy = false
         if (!result?.success) { newToast(result?.error || "ChurchTools-Synchronisierung fehlgeschlagen."); return }
-        const nextOrigins = new Set((result.calendars || []).map((cal) => "churchtools:" + cal.id))
         calendars.update((all) => {
             for (const cal of result.calendars || []) {
                 const id = "churchtools:" + cal.id
