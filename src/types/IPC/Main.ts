@@ -192,7 +192,10 @@ export enum Main {
     AI_GET_STATUS = "AI_GET_STATUS",
     AI_SETUP = "AI_SETUP",
     AI_SET_KEY = "AI_SET_KEY",
-    AI_LLM_COMPLETE = "AI_LLM_COMPLETE"
+    AI_LLM_COMPLETE = "AI_LLM_COMPLETE",
+    CHURCHTOOLS_CALENDAR_STATUS = "CHURCHTOOLS_CALENDAR_STATUS",
+    CHURCHTOOLS_CALENDAR_SAVE = "CHURCHTOOLS_CALENDAR_SAVE",
+    CHURCHTOOLS_CALENDAR_SYNC = "CHURCHTOOLS_CALENDAR_SYNC"
 }
 
 export interface MainSendPayloads {
@@ -306,6 +309,9 @@ export interface MainSendPayloads {
     [Main.AI_SETUP]: AiSetupOptions
     [Main.AI_SET_KEY]: { providerId: AIProviderId; key: string }
     [Main.AI_LLM_COMPLETE]: { providerId: AIProviderId; model: string; options: { systemPrompt?: string; prompt: string; jsonSchema?: any; temperature?: number; maxTokens?: number } }
+    [Main.CHURCHTOOLS_CALENDAR_STATUS]: undefined
+    [Main.CHURCHTOOLS_CALENDAR_SAVE]: { baseUrl: string; token: string }
+    [Main.CHURCHTOOLS_CALENDAR_SYNC]: { from?: string; to?: string }
 }
 
 export interface MainReturnPayloads {
@@ -418,6 +424,9 @@ export interface MainReturnPayloads {
     [Main.AI_SETUP]: Promise<boolean>
     [Main.AI_SET_KEY]: Promise<boolean>
     [Main.AI_LLM_COMPLETE]: Promise<{ text: string; error?: string; code?: string; retryAfter?: number }>
+    [Main.CHURCHTOOLS_CALENDAR_STATUS]: { configured: boolean; baseUrl: string }
+    [Main.CHURCHTOOLS_CALENDAR_SAVE]: { success: boolean; error?: string }
+    [Main.CHURCHTOOLS_CALENDAR_SYNC]: import("../../electron/churchTools/calendar").ChurchToolsSyncResult
 }
 
 ///////////
