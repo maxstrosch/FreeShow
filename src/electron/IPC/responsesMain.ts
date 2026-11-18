@@ -19,7 +19,7 @@ import { openNowPlaying, setPlayingState, unsetPlayingAudio } from "../audio/now
 import { CaptureHelper } from "../capture/CaptureHelper"
 import { canSync, getSyncTeams, hasTeamData, markAsNewSync, restoreCloudBackup, syncData } from "../cloud/syncManager"
 import { ChurchAppsChat } from "../contentProviders/churchApps/ChurchAppsChat"
-import { getChurchToolsCalendarStatus, saveChurchToolsCalendarSettings, syncChurchToolsCalendar } from "../churchTools/calendar"
+import { getChurchToolsAgenda, getChurchToolsCalendarStatus, saveChurchToolsCalendarSettings, syncChurchToolsCalendar } from "../churchTools/calendar"
 import { ContentProviderRegistry } from "../contentProviders/ContentProviderRegistry"
 import { deleteBackup, getBackups, restoreFiles } from "../data/backup"
 import { getLocalIPs } from "../data/bonjour"
