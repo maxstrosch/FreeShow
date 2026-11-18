@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeDays, activePopup, calendars, eventEdit, events, special } from "../../../stores"
+    import { activeDays, activePopup, calendars, eventEdit, events, popupData, special } from "../../../stores"
     import { triggerClickOnEnterSpace } from "../../../utils/clickable"
     import { actionData } from "../../actions/actionData"
     import { getActionName } from "../../actions/actions"
@@ -61,6 +61,7 @@
                         role="button"
                         tabindex="0"
                         on:click={() => {
+                            if (event.churchTools) { popupData.set({ event }); activePopup.set("churchtools_agenda"); return }
                             eventEdit.set(event.id)
                             activePopup.set("edit_event")
                         }}
