@@ -147,3 +147,28 @@ export async function syncChurchToolsCalendar(range?: { from?: string; to?: stri
         return { success: false, error: error?.message || "ChurchTools-Synchronisierung fehlgeschlagen." }
     }
 }
+
+
+export interface ChurchToolsAgendaResult {
+    success: boolean
+    name?: string
+    items?: any[]
+    error?: string
+}
+
+/** Load the agenda belonging to a ChurchTools Event-module event. */
+export async function getChurchToolsAgenda(eventId: string): Promise<ChurchToolsAgendaResult> {
+    const settings = getSettings()
+    if (!settings) return { success: false, error: "ChurchTools ist noch nicht eingerichtet." }
+    if (!eventId || !/^\\d+$/.test(String(eventId))) return { success: false, error: "Für diesen Kalendertermin ist keine verknüpfte ChurchTools-Veranstaltung hinterlegt." }
+
+    try {
+        const agenda = await requestChurchTools(`/events/${encodeURIComponent(eventId)}/agenda`, settings)
+        const data = agenda?.data || agenda
+        const items = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : null
+        if (!items) return { success: false, error: "ChurchTools hat keine gültige Agenda zurückgegeben." }
+        return { success: true, name: data?.name || "ChurchTools-Agenda", items }
+    } catch (error: any) {
+        return { success: false, error: error?.message || "ChurchTools-Agenda konnte nicht geladen werden." }
+    }
+}
