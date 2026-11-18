@@ -160,7 +160,7 @@ export interface ChurchToolsAgendaResult {
 export async function getChurchToolsAgenda(eventId: string): Promise<ChurchToolsAgendaResult> {
     const settings = getSettings()
     if (!settings) return { success: false, error: "ChurchTools ist noch nicht eingerichtet." }
-    if (!eventId || !/^\\d+$/.test(String(eventId))) return { success: false, error: "Für diesen Kalendertermin ist keine verknüpfte ChurchTools-Veranstaltung hinterlegt." }
+    if (!eventId || !/^\d+$/.test(String(eventId))) return { success: false, error: "Für diesen Kalendertermin ist keine verknüpfte ChurchTools-Veranstaltung hinterlegt." }
 
     try {
         const agenda = await requestChurchTools(`/events/${encodeURIComponent(eventId)}/agenda`, settings)
