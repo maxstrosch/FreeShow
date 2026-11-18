@@ -114,7 +114,7 @@ export async function syncChurchToolsCalendar(range?: { from?: string; to?: stri
             try {
                 const combined = await requestChurchTools(`/calendars/${encodeURIComponent(item.calendarId)}/appointments/${encodeURIComponent(item.id)}/${item.date}`, settings)
                 const event = combined?.event
-                if (event?.domainIdentifier) eventId = String(event.domainIdentifier)
+                if (event?.domainIdentifier || event?.id || event?.eventId) eventId = String(event.domainIdentifier || event.id || event.eventId)
             } catch {
                 // Some calendar appointments are not linked to an Event in the ChurchTools event module.
             }
