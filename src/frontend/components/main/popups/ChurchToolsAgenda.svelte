@@ -8,7 +8,6 @@
     import { loadShows } from "../../helpers/setShow"
     import { history } from "../../helpers/history"
     import { newToast } from "../../../utils/common"
-    import T from "../../helpers/T.svelte"
     import MaterialButton from "../../inputs/MaterialButton.svelte"
 
     let loading = false
@@ -75,7 +74,6 @@
     function createProject() {
         if (!agenda || creating) return
         creating = true
-        const projectId = uid()
         const project: Project = {
             name: agenda.name || eventData?.name || "ChurchTools-Gottesdienst",
             created: Date.now(),
