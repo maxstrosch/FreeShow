@@ -44,7 +44,7 @@
     }
 
     function itemTitle(item: any) {
-        return item?.song?.title || item?.title || item?.name || item?.text || "Programmpunkt"
+        return item?.song?.title || item?.song?.name || item?.title || item?.name || item?.text || "Programmpunkt"
     }
 
     async function matchSongs() {
@@ -86,7 +86,9 @@
 
         agenda.items.forEach((item: any, index: number) => {
             const title = itemTitle(item)
-            const note = [item.note, item.responsible, item.serviceGroupNotes].filter(Boolean).join("\n")
+            const song = item.song || {}
+            const songDetails = [song.key ? "Tonart: " + song.key : "", song.bpm ? "BPM: " + song.bpm : "", song.arrangement ? "Arrangement: " + (song.arrangement.name || song.arrangement) : ""].filter(Boolean).join(" · ")
+            const note = [item.note, item.responsible, item.serviceGroupNotes, songDetails].filter(Boolean).join("\n")
             if (item.type === "song") {
                 const matchedId = matches[index]
                 if (matchedId) {
