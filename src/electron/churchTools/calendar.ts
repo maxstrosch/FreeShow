@@ -42,9 +42,8 @@ export function saveChurchToolsCalendarSettings(input: ChurchToolsCalendarSettin
 
     // Credentials are kept only in the non-portable ACCESS store. Never send them back to the renderer.
     try {
-        const storedToken = safeStorage.isEncryptionAvailable()
-            ? "encrypted:" + safeStorage.encryptString(token).toString("base64")
-            : token
+        if (!safeStorage.isEncryptionAvailable()) return { success: false, error: "Die sichere lokale Speicherung ist auf diesem System nicht verfügbar." }
+        const storedToken = "encrypted:" + safeStorage.encryptString(token).toString("base64")
         _store.ACCESS?.set(ACCESS_KEY, { baseUrl, token: storedToken })
     } catch {
         return { success: false, error: "Die sichere lokale Speicherung ist auf diesem System nicht verfügbar." }
