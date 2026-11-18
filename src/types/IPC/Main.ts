@@ -195,7 +195,8 @@ export enum Main {
     AI_LLM_COMPLETE = "AI_LLM_COMPLETE",
     CHURCHTOOLS_CALENDAR_STATUS = "CHURCHTOOLS_CALENDAR_STATUS",
     CHURCHTOOLS_CALENDAR_SAVE = "CHURCHTOOLS_CALENDAR_SAVE",
-    CHURCHTOOLS_CALENDAR_SYNC = "CHURCHTOOLS_CALENDAR_SYNC"
+    CHURCHTOOLS_CALENDAR_SYNC = "CHURCHTOOLS_CALENDAR_SYNC",
+    CHURCHTOOLS_AGENDA_GET = "CHURCHTOOLS_AGENDA_GET"
 }
 
 export interface MainSendPayloads {
@@ -312,6 +313,7 @@ export interface MainSendPayloads {
     [Main.CHURCHTOOLS_CALENDAR_STATUS]: undefined
     [Main.CHURCHTOOLS_CALENDAR_SAVE]: { baseUrl: string; token: string }
     [Main.CHURCHTOOLS_CALENDAR_SYNC]: { from?: string; to?: string }
+    [Main.CHURCHTOOLS_AGENDA_GET]: { eventId: string }
 }
 
 export interface MainReturnPayloads {
@@ -427,6 +429,7 @@ export interface MainReturnPayloads {
     [Main.CHURCHTOOLS_CALENDAR_STATUS]: { configured: boolean; baseUrl: string }
     [Main.CHURCHTOOLS_CALENDAR_SAVE]: { success: boolean; error?: string }
     [Main.CHURCHTOOLS_CALENDAR_SYNC]: import("../../electron/churchTools/calendar").ChurchToolsSyncResult
+    [Main.CHURCHTOOLS_AGENDA_GET]: import("../../electron/churchTools/calendar").ChurchToolsAgendaResult
 }
 
 ///////////
