@@ -20,6 +20,7 @@ import ChooseOutput from "../components/main/popups/ChooseOutput.svelte"
 import ChooseScreen from "../components/main/popups/ChooseScreen.svelte"
 import ChooseStyle from "../components/main/popups/ChooseStyle.svelte"
 import ChurchAppsSyncCategories from "../components/main/popups/ChurchAppsSyncCategories.svelte"
+import ChurchToolsAgenda from "../components/main/popups/ChurchToolsAgenda.svelte"
 import CleaningUtility from "../components/main/popups/CleaningUtility.svelte"
 import CloudMethod from "../components/main/popups/CloudMethod.svelte"
 import CloudSync from "../components/main/popups/CloudSync.svelte"
@@ -182,6 +183,7 @@ export const popups: { [key in Popups]: ComponentType } = {
     template_info: TemplateInfo,
     cleaning_utility: CleaningUtility,
     pco_picker: PcoServicePicker,
+    churchtools_agenda: ChurchToolsAgenda,
     sync_folders: SyncFolders,
     node_options: NodeOptions,
     ai_model_manager: AiModelManager,
