@@ -1,5 +1,7 @@
 <script lang="ts">
     import { calendars, events, special } from "../../../stores"
+    import { Main } from "../../../../types/IPC/Main"
+    import { requestMain } from "../../../IPC/main"
     import { newToast } from "../../../utils/common"
     import { translateText } from "../../../utils/language"
     import Icon from "../../helpers/Icon.svelte"
@@ -8,6 +10,49 @@
     import { fetchAndImportIcs, getIcsCalendars, isCalendarHidden, toggleCalendarHidden, type IcsCalendar } from "./calendars"
 
     let syncingCalendars: Record<string, boolean> = {}
+    let churchToolsUrl = ""
+    let churchToolsToken = ""
+    let churchToolsConfigured = false
+    let churchToolsBusy = false
+
+    async function loadChurchToolsStatus() {
+        const status = await requestMain(Main.CHURCHTOOLS_CALENDAR_STATUS)
+        churchToolsConfigured = !!status?.configured
+        churchToolsUrl = status?.baseUrl || ""
+    }
+
+    async function saveChurchTools() {
+        churchToolsBusy = true
+        const result = await requestMain(Main.CHURCHTOOLS_CALENDAR_SAVE, { baseUrl: churchToolsUrl, token: churchToolsToken })
+        churchToolsBusy = false
+        if (!result?.success) { newToast(result?.error || "ChurchTools konnte nicht gespeichert werden."); return }
+        churchToolsToken = ""
+        churchToolsConfigured = true
+        await syncChurchTools()
+    }
+
+    async function syncChurchTools() {
+        if (churchToolsBusy) return
+        churchToolsBusy = true
+        const result = await requestMain(Main.CHURCHTOOLS_CALENDAR_SYNC, {})
+        churchToolsBusy = false
+        if (!result?.success) { newToast(result?.error || "ChurchTools-Synchronisierung fehlgeschlagen."); return }
+        const nextOrigins = new Set((result.calendars || []).map((cal) => "churchtools:" + cal.id))
+        calendars.update((all) => {
+            for (const cal of result.calendars || []) {
+                const id = "churchtools:" + cal.id
+                all[id] = { ...(all[id] || {}), id, name: cal.name, color: all[id]?.color || cal.color, custom: false, lastSynced: Date.now() }
+            }
+            return all
+        })
+        events.update((all) => {
+            for (const [id, event] of Object.entries(all)) if (typeof event.origin === "string" && event.origin.startsWith("churchtools:")) delete all[id]
+            Object.assign(all, result.events || {})
+            return all
+        })
+    }
+
+    loadChurchToolsStatus()
 
     $: icsCalendars = getIcsCalendars($events, $calendars)
 
@@ -28,6 +73,18 @@
 </script>
 
 <!-- TODO: export specific calendar (from context menu) -->
+
+<div class="calendars-section" style="margin-top: 10px;">
+    <p class="section-title">ChurchTools</p>
+    <div class="calendar-list" style="padding: 6px;">
+        <input class="input" placeholder="https://gemeinde.church.tools" bind:value={churchToolsUrl} />
+        <input class="input" type="password" placeholder={churchToolsConfigured ? "Neuen API-Token eingeben (optional)" : "ChurchTools API-Token"} bind:value={churchToolsToken} />
+        <div class="calendar-actions">
+            <MaterialButton title="Speichern" disabled={churchToolsBusy || !churchToolsUrl || (!churchToolsConfigured && !churchToolsToken)} on:click={saveChurchTools}><T id="actions.save" /></MaterialButton>
+            {#if churchToolsConfigured}<MaterialButton title="ChurchTools synchronisieren" disabled={churchToolsBusy} on:click={syncChurchTools}><Icon id="refresh" class={churchToolsBusy ? "spinning" : ""} white /></MaterialButton>{/if}
+        </div>
+    </div>
+</div>
 
 {#if icsCalendars.length > 0}
     <div class="calendars-section" style="margin-top: 10px;">
