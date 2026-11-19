@@ -47,6 +47,39 @@
         return item?.song?.title || item?.song?.name || item?.title || item?.name || item?.text || "Programmpunkt"
     }
 
+    function formatResponsible(value: any): string {
+        if (!value) return ""
+        if (typeof value === "string") return value
+        if (Array.isArray(value)) return value.map(formatResponsible).filter(Boolean).join(", ")
+        const persons = value?.persons
+        const names = Array.isArray(persons) ? persons.map((entry: any) => {
+            const person = entry?.person || {}
+            const name = [person.firstName, person.lastName].filter(Boolean).join(" ") || person.title || person.domainAttributes?.email
+            return [name, entry?.service].filter(Boolean).join(" ")
+        }).filter(Boolean) : []
+        return [value?.text, ...names].filter(Boolean).join(" · ")
+    }
+
+    function formatGroupNotes(value: any): string {
+        if (!value) return ""
+        if (typeof value === "string") return value
+        if (!Array.isArray(value)) return value?.note || ""
+        return value.map((entry: any) => entry?.note).filter(Boolean).join(" · ")
+    }
+
+    function itemNotes(item: any): string {
+        return [
+            item?.note,
+            formatResponsible(item?.responsible),
+            formatGroupNotes(item?.serviceGroupNotes),
+        ].filter(Boolean).join("\\n")
+    }
+
+    function itemDuration(item: any): number | null {
+        const value = Number(item?.calculatedDuration ?? item?.duration)
+        return Number.isFinite(value) && value > 0 ? value : null
+    }
+
     async function matchSongs() {
         const titles = (agenda?.items || []).filter((item: any) => item.type === "song").map((item: any) => itemTitle(item))
         const available = get(shows)
@@ -136,8 +169,11 @@
                         <span style="opacity:0.65;">{item.type === "header" ? "Überschrift" : "Programmpunkt"}</span>
                     {/if}
                 </div>
-                {#if item.note || item.responsible || item.serviceGroupNotes}
-                    <p style="opacity:0.75;font-size:0.9em;margin-top:4px;">{[item.note, item.responsible, item.serviceGroupNotes].filter(Boolean).join(" · ")}</p>
+                {#if itemNotes(item)}
+                    <p style="opacity:0.75;font-size:0.9em;margin-top:4px;white-space:pre-line;">{itemNotes(item)}</p>
+                {/if}
+                {#if itemDuration(item)}
+                    <p style="opacity:0.6;font-size:0.82em;margin:3px 0;">Dauer: {itemDuration(item)} Sekunden</p>
                 {/if}
             </div>
         {/each}
