@@ -17,13 +17,22 @@
     let matches: Record<number, string> = {}
     let unmatched: number[] = []
     let eventData: any = null
+    let agendaRequested = false
 
-    $: if ($popupData?.event && $popupData.event !== eventData) {
-        eventData = $popupData.event
-        loadAgenda()
+    // Opening a calendar entry must not trigger an API request.
+    // The agenda is fetched only after the user explicitly asks for it.
+    $: if ($popupData?.event !== eventData) {
+        eventData = $popupData?.event || null
+        agenda = null
+        error = ""
+        agendaRequested = false
+        matches = {}
+        unmatched = []
     }
 
     async function loadAgenda() {
+        if (loading || agendaRequested) return
+        agendaRequested = true
         loading = true
         error = ""
         agenda = null
@@ -150,7 +159,7 @@
     <p>ChurchTools-Agenda wird geladen …</p>
 {:else if error}
     <p style="color: var(--warning);">{error}</p>
-    <MaterialButton variant="outlined" on:click={loadAgenda}>Erneut versuchen</MaterialButton>
+    <MaterialButton variant="outlined" on:click={() => { agendaRequested = false; loadAgenda() }}>Erneut versuchen</MaterialButton>
 {:else if agenda}
     <div style="min-width: min(620px, 70vw);">
         <h3>{agenda.name}</h3>
@@ -182,4 +191,9 @@
             ChurchTools-Projekt erstellen
         </MaterialButton>
     </div>
+{:else}
+    <p>Die Agenda wird nicht automatisch beim Öffnen des Termins geladen.</p>
+    <MaterialButton variant="contained" disabled={!eventData?.churchTools?.eventId} on:click={loadAgenda}>
+        ChurchTools-Agenda jetzt laden
+    </MaterialButton>
 {/if}
