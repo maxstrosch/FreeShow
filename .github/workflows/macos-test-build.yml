@@ -1,0 +1,59 @@
+name: macOS Test Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/churchtools-integration
+    paths:
+      - ".github/workflows/macos-test-build.yml"
+      - "src/**"
+      - "config/building/**"
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build-macos:
+    name: Build macOS app (Intel + Apple Silicon)
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v5
+        with:
+          ref: feature/churchtools-integration
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Package macOS app
+        run: npx electron-builder --config config/building/electron-builder.local.yaml --mac dmg zip --publish never
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreeShow-macOS-test
+          path: |
+            dist/*.dmg
+            dist/*.zip
+          if-no-files-found: error
+          retention-days: 14
