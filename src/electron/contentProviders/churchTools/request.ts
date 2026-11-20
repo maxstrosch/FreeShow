@@ -108,7 +108,7 @@ export async function churchToolsImportAgenda(baseUrl: string, token: string, ev
         const kind = String(item.type || "").toLowerCase()
         const title = kind === "song" ? (item.song?.title || item.title || "") : (item.title || "")
         const duration = Number(item.duration) || undefined
-        const note = [item.note, item.responsible?.text, item.serviceGroupNotes].filter(Boolean).join("\\n")
+        const note = [item.note, item.responsible?.text, item.serviceGroupNotes].filter(Boolean).join("\n")
 
         if (kind === "header") {
             projectItems.push({ type: "section", id: uid(), name: title, scheduleLength: duration, notes: note })
@@ -134,7 +134,7 @@ export async function churchToolsImportAgenda(baseUrl: string, token: string, ev
         const placeholder = makePlaceholderSong(title || "Programmpunkt", String(item.id), note)
         if (kind === "text" && text) {
             const slideId = Object.keys(placeholder.slides)[0]
-            placeholder.slides[slideId].items[0].lines = text.split(/\\r?\\n/).map((line: string) => ({ align: "", text: [{ style: "", value: line }] }))
+            placeholder.slides[slideId].items[0].lines = text.split(/\r?\n/).map((line: string) => ({ align: "", text: [{ style: "", value: line }] }))
             importedShows.push(placeholder)
             projectItems.push({ type: "show", id: placeholder.id, name: title, scheduleLength: duration, notes: note, providerItemId: String(item.id) })
         } else {
