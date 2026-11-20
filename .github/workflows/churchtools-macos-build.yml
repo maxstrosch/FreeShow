@@ -38,7 +38,10 @@ jobs:
       - name: Install dmg-license
         run: npm install --no-save dmg-license
 
-      - name: Build macOS installers
+      - name: Compile FreeShow application
+        run: npm run build
+
+      - name: Package macOS installers
         run: npx electron-builder --config config/building/electron-builder.local.yaml --mac dmg zip --publish never
 
       - name: Upload macOS installers
