@@ -16,7 +16,7 @@
     let busy = false
 
     onMount(async () => {
-        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "churchTools" })
+        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "contentProviders.churchTools" })
         if (saved) {
             baseUrl = saved.baseUrl || ""
             token = saved.token || ""
