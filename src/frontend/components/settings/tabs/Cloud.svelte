@@ -16,7 +16,7 @@
     let busy = false
 
     onMount(async () => {
-        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "churchTools" })
+        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "contentProviders.churchTools" })
         if (saved) {
             baseUrl = saved.baseUrl || ""
             token = saved.token || ""
@@ -79,7 +79,7 @@
     <MaterialTextInput label="ChurchTools-URL" bind:value={baseUrl} placeholder="https://gemeinde.church.tools" />
 </InputRow>
 <InputRow>
-    <MaterialTextInput label="Login-Token" bind:value={token} placeholder="ChurchTools Login-Token" password />
+    <MaterialTextInput label="Login-Token" bind:value={token} placeholder="ChurchTools Login-Token" type="password" />
 </InputRow>
 <InputRow>
     <MaterialButton on:click={testConnection} disabled={busy || !baseUrl || !token}>Verbindung testen</MaterialButton>
