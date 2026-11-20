@@ -24,7 +24,7 @@
     })
 
     async function saveCredentials() {
-        await requestMain(Main.SET_STORE_VALUE, { file: "ACCESS", key: "churchTools", value: { baseUrl: baseUrl.trim(), token: token.trim() } })
+        await requestMain(Main.SET_STORE_VALUE, { file: "ACCESS", key: "contentProviders.churchTools", value: { baseUrl: baseUrl.trim(), token: token.trim() } })
         status = "Zugangsdaten lokal gespeichert."
     }
 
