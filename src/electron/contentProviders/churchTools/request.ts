@@ -27,8 +27,8 @@ export interface ChurchToolsAgendaItem {
 }
 
 function getClient(baseUrl: string, token: string) {
-    const url = baseUrl.trim().replace(/\\/+$/, "")
-    if (!/^https?:\\/\\//i.test(url)) throw new Error("Bitte eine gültige ChurchTools-URL inklusive https:// angeben.")
+    const url = baseUrl.trim().replace(/\/+$/, "")
+    if (!/^https?:\/\//i.test(url)) throw new Error("Bitte eine gültige ChurchTools-URL inklusive https:// angeben.")
     if (!token.trim()) throw new Error("Bitte ein ChurchTools-Login-Token eingeben.")
     return axios.create({
         baseURL: url,
@@ -67,7 +67,7 @@ export async function churchToolsFetchAgenda(baseUrl: string, token: string, eve
 }
 
 function normalizeSongTitle(value: string): string {
-    return value.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLowerCase().replace(/&/g, "und").replace(/[^a-z0-9]/g, "")
+    return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, "und").replace(/[^a-z0-9]/g, "")
 }
 
 function makePlaceholderSong(title: string, sourceId: string, notes: string) {
