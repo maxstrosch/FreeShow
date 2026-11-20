@@ -5,3 +5,5 @@ win:
 
 mac:
     identity: null
+
+afterSign: null
