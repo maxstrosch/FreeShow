@@ -1,5 +1,8 @@
 name: macOS Build
 
+# This is an unsigned test build. The local electron-builder config disables
+# the inherited afterSign notarization hook because no Apple credentials exist.
+
 on:
   push:
     branches:
