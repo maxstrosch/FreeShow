@@ -280,6 +280,11 @@ export const mainResponses: MainResponses = {
             return { success: false, error: error?.message || "Unknown download error" }
         }
     },
+    // ChurchTools calendar integration
+    [Main.CHURCHTOOLS_CALENDAR_STATUS]: () => getChurchToolsCalendarStatus(),
+    [Main.CHURCHTOOLS_CALENDAR_SAVE]: (data) => saveChurchToolsCalendarSettings(data),
+    [Main.CHURCHTOOLS_CALENDAR_SYNC]: (data) => syncChurchToolsCalendar(data),
+    [Main.CHURCHTOOLS_AGENDA_GET]: (data) => getChurchToolsAgenda(data.eventId),
     // AI
     [Main.AI_GET_MODELS]: (data) => fetchProviderModels(data.providerId),
     [Main.AI_GET_BIN]: () => LocalModelManager.getDownloadedBinFiles(),
