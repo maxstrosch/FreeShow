@@ -149,7 +149,7 @@ export async function churchToolsImportAgenda(baseUrl: string, token: string, ev
         created: Date.now(),
         parent: "",
         origin: "churchtools",
-        shows: projectItems
+        items: projectItems
     }
 
     sendToMain(ToMain.PROVIDER_PROJECTS, {
