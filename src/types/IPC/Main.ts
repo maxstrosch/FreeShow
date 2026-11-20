@@ -428,8 +428,8 @@ export interface MainReturnPayloads {
     [Main.AI_LLM_COMPLETE]: Promise<{ text: string; error?: string; code?: string; retryAfter?: number }>
     [Main.CHURCHTOOLS_CALENDAR_STATUS]: { configured: boolean; baseUrl: string }
     [Main.CHURCHTOOLS_CALENDAR_SAVE]: { success: boolean; error?: string }
-    [Main.CHURCHTOOLS_CALENDAR_SYNC]: import("../../electron/churchTools/calendar").ChurchToolsSyncResult
-    [Main.CHURCHTOOLS_AGENDA_GET]: import("../../electron/churchTools/calendar").ChurchToolsAgendaResult
+    [Main.CHURCHTOOLS_CALENDAR_SYNC]: Promise<import("../../electron/churchTools/calendar").ChurchToolsSyncResult>
+    [Main.CHURCHTOOLS_AGENDA_GET]: Promise<import("../../electron/churchTools/calendar").ChurchToolsAgendaResult>
 }
 
 ///////////
