@@ -5,3 +5,6 @@ win:
 
 mac:
     identity: null
+    hardenedRuntime: false
+    notarize: false
+    afterSign: null
