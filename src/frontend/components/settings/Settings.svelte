@@ -8,6 +8,7 @@
     import SmartSettings from "../../ai/components/settings/SmartSettings.svelte"
     import AudioRouting from "./tabs/AudioRouting.svelte"
     import Connection from "./tabs/Connection.svelte"
+    import Cloud from "./tabs/Cloud.svelte"
     import Files from "./tabs/Files.svelte"
     import FilesButtons from "./tabs/FilesButtons.svelte"
     import General from "./tabs/General.svelte"
@@ -85,6 +86,8 @@
             <AudioRouting />
         {:else if tabId === "connection"}
             <Connection />
+        {:else if tabId === "cloud"}
+            <Cloud />
         {:else if tabId === "files"}
             <Files />
         {:else if tabId === "profiles"}
