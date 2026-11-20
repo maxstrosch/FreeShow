@@ -156,6 +156,9 @@ export enum Main {
     PROVIDER_DISCONNECT = "PROVIDER_DISCONNECT",
     PROVIDER_STARTUP_LOAD = "PROVIDER_STARTUP_LOAD",
     PROVIDER_FETCH_FOLDERS = "PROVIDER_FETCH_FOLDERS",
+    CHURCHTOOLS_TEST = "CHURCHTOOLS_TEST",
+    CHURCHTOOLS_EVENTS = "CHURCHTOOLS_EVENTS",
+    CHURCHTOOLS_AGENDA = "CHURCHTOOLS_AGENDA",
     PCO_LIVE_GET = "PCO_LIVE_GET",
     PCO_PUSHER_AUTH = "PCO_PUSHER_AUTH",
     PCO_FETCH_SERVICE_TREE = "PCO_FETCH_SERVICE_TREE",
@@ -272,7 +275,10 @@ export interface MainSendPayloads {
     [Main.PROVIDER_LOAD_SERVICES]: { providerId: ContentProviderId; cloudOnly?: boolean; data?: any }
     [Main.PROVIDER_DISCONNECT]: { providerId: ContentProviderId; scope?: string }
     [Main.PROVIDER_STARTUP_LOAD]: { providerId: ContentProviderId; scope?: string; data?: any; cloudOnly?: boolean }
-    [Main.PROVIDER_FETCH_FOLDERS]: { providerId: ContentProviderId }
+    [Main.PROVIDER_FETCH_FOLDERS]: { providerId: ContentProviderId };
+    [Main.CHURCHTOOLS_TEST]: { baseUrl: string; token: string };
+    [Main.CHURCHTOOLS_EVENTS]: { baseUrl: string; token: string };
+    [Main.CHURCHTOOLS_AGENDA]: { baseUrl: string; token: string; eventId: string }
     [Main.PCO_LIVE_GET]: { serviceTypeId: string; planId: string }
     [Main.PCO_PUSHER_AUTH]: { socketId: string; channelName: string; serviceTypeId: string }
     [Main.PCO_FETCH_SERVICE_TREE]: undefined
@@ -388,7 +394,10 @@ export interface MainReturnPayloads {
     // Provider-based routing
     [Main.PROVIDER_CONNECTIONS]: { [key in ContentProviderId]?: boolean }
     [Main.PROVIDER_DISCONNECT]: { success: boolean }
-    [Main.PROVIDER_FETCH_FOLDERS]: Promise<PCOFolderTreeNode[]>
+    [Main.PROVIDER_FETCH_FOLDERS]: Promise<PCOFolderTreeNode[]>;
+    [Main.CHURCHTOOLS_TEST]: Promise<{ success: boolean; message: string }>;
+    [Main.CHURCHTOOLS_EVENTS]: Promise<any[]>;
+    [Main.CHURCHTOOLS_AGENDA]: Promise<{ event: any; items: any[] }>
     [Main.PCO_FETCH_SERVICE_TREE]: Promise<PCOFolderTreeNode[]>
     [Main.PCO_LIVE_GET]: Promise<{ liveId: string | null; liveChannel: string | null; orgId: string | null; liveStartAt: string | null; liveEndAt: string | null; length: number | null; isPreService: boolean; serviceStartAt: string | null; serviceEndAt: string | null } | null>
     [Main.PCO_PUSHER_AUTH]: Promise<{ auth: string; channel_data?: string } | null>
