@@ -19,6 +19,7 @@ import { openNowPlaying, setPlayingState, unsetPlayingAudio } from "../audio/now
 import { CaptureHelper } from "../capture/CaptureHelper"
 import { canSync, getSyncTeams, hasTeamData, markAsNewSync, restoreCloudBackup, syncData } from "../cloud/syncManager"
 import { ChurchAppsChat } from "../contentProviders/churchApps/ChurchAppsChat"
+import { churchToolsFetchAgenda, churchToolsFetchEvents, churchToolsTestConnection } from "../contentProviders/churchTools/request"
 import { ContentProviderRegistry } from "../contentProviders/ContentProviderRegistry"
 import { deleteBackup, getBackups, restoreFiles } from "../data/backup"
 import { getLocalIPs } from "../data/bonjour"
@@ -200,6 +201,9 @@ export const mainResponses: MainResponses = {
     },
     [Main.PROVIDER_STARTUP_LOAD]: (data) => ContentProviderRegistry.startupLoad(data.providerId, data.scope || "", data.data, data.cloudOnly),
     [Main.PROVIDER_FETCH_FOLDERS]: (data) => ContentProviderRegistry.fetchFolderTree(data.providerId),
+    [Main.CHURCHTOOLS_TEST]: (data) => churchToolsTestConnection(data.baseUrl, data.token),
+    [Main.CHURCHTOOLS_EVENTS]: (data) => churchToolsFetchEvents(data.baseUrl, data.token),
+    [Main.CHURCHTOOLS_AGENDA]: (data) => churchToolsFetchAgenda(data.baseUrl, data.token, data.eventId),
     [Main.PCO_FETCH_SERVICE_TREE]: () => ContentProviderRegistry.fetchServiceTree("planningcenter"),
     [Main.PCO_LOAD_PLAN]: (data) => ContentProviderRegistry.loadSinglePlan(data.serviceTypeId, data.planId),
     [Main.PCO_LIVE_GET]: (data) => ContentProviderRegistry.getPcoLiveData(data.serviceTypeId, data.planId).catch(() => null),
