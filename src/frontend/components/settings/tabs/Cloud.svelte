@@ -54,7 +54,19 @@
         busy = false
     }
 
-    async function importAgenda() {\n        busy = true\n        status = ""\n        try {\n            const result = await requestMain(Main.CHURCHTOOLS_IMPORT, { baseUrl, token, eventId })\n            status = `Projekt „${result.projectName}“ erstellt: ${result.matched} Lieder automatisch zugeordnet, ${result.created} Platzhalter für nicht gefundene Lieder angelegt.`\n        } catch (error: any) {\n            status = error?.message || "Projekt konnte nicht erstellt werden."\n        }\n        busy = false\n    }\n\n    async function loadAgenda() {
+    async function importAgenda() {
+        busy = true
+        status = ""
+        try {
+            const result = await requestMain(Main.CHURCHTOOLS_IMPORT, { baseUrl, token, eventId })
+            status = `Projekt „${result.projectName}“ erstellt: ${result.matched} Lieder automatisch zugeordnet, ${result.created} Platzhalter für nicht gefundene Lieder angelegt.`
+        } catch (error: any) {
+            status = error?.message || "Projekt konnte nicht erstellt werden."
+        }
+        busy = false
+    }
+
+    async function loadAgenda() {
         busy = true
         status = ""
         try {
@@ -106,7 +118,10 @@
 {/if}
 
 {#if agenda.length}
-    <Title label="Ablaufplan-Vorschau" icon="list" />\n    <InputRow>\n        <MaterialButton on:click={importAgenda} disabled={busy || !eventId || !agenda.length}>Als FreeShow-Projekt übernehmen</MaterialButton>\n    </InputRow>
+    <Title label="Ablaufplan-Vorschau" icon="list" />
+    <InputRow>
+        <MaterialButton on:click={importAgenda} disabled={busy || !eventId || !agenda.length}>Als FreeShow-Projekt übernehmen</MaterialButton>
+    </InputRow>
     {#each agenda as item}
         <InputRow>
             <div style="flex:1;">
