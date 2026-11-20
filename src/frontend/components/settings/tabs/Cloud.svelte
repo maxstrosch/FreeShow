@@ -91,7 +91,7 @@
     <Title label="Events" icon="calendar" />
     {#each events as event}
         <InputRow>
-            <MaterialButton style="flex:1;justify-content:flex-start;" on:click={() => (eventId = String(event.id))} active={eventId === String(event.id)}>
+            <MaterialButton style="flex:1;justify-content:flex-start;" on:click={() => (eventId = String(event.id))} isActive={eventId === String(event.id)}>
                 {eventLabel(event)}
             </MaterialButton>
         </InputRow>
