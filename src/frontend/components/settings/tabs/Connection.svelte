@@ -340,9 +340,6 @@
         <MaterialDropdown label="actions.project_template" options={projectTemplateOptions} value={$contentProviderData.planningcenter?.projectTemplate || ""} on:change={(e) => updateProvider("planningcenter", "projectTemplate", e.detail)} />
     {/if}
 
-    <div class="churchtools-subsection">
-        <ChurchTools />
-    </div>
 {:else if $providerConnections.churchApps && !cloudOnly.churchApps}
     <!-- ChurchApps connected -->
     <Title label="Content Provider: ChurchApps" icon="list" />
@@ -402,6 +399,11 @@
 
     <MaterialDropdown label="Song origin" options={providerOriginOptions} value={$contentProviderData.onstage?.songOrigin || ""} on:change={(e) => updateProvider("onstage", "songOrigin", e.detail)} />
 {/if}
+
+<!-- ChurchTools is an independent connection and must remain available alongside other providers. -->
+<div class="churchtools-subsection">
+    <ChurchTools />
+</div>
 
 <!-- OBS Studio Controller -->
 <Title label="OBS Studio" icon="record" />
