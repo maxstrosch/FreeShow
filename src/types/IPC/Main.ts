@@ -159,6 +159,7 @@ export enum Main {
     CHURCHTOOLS_TEST = "CHURCHTOOLS_TEST",
     CHURCHTOOLS_EVENTS = "CHURCHTOOLS_EVENTS",
     CHURCHTOOLS_AGENDA = "CHURCHTOOLS_AGENDA",
+    CHURCHTOOLS_IMPORT = "CHURCHTOOLS_IMPORT",
     PCO_LIVE_GET = "PCO_LIVE_GET",
     PCO_PUSHER_AUTH = "PCO_PUSHER_AUTH",
     PCO_FETCH_SERVICE_TREE = "PCO_FETCH_SERVICE_TREE",
@@ -279,6 +280,7 @@ export interface MainSendPayloads {
     [Main.CHURCHTOOLS_TEST]: { baseUrl: string; token: string };
     [Main.CHURCHTOOLS_EVENTS]: { baseUrl: string; token: string };
     [Main.CHURCHTOOLS_AGENDA]: { baseUrl: string; token: string; eventId: string }
+    [Main.CHURCHTOOLS_IMPORT]: { baseUrl: string; token: string; eventId: string }
     [Main.PCO_LIVE_GET]: { serviceTypeId: string; planId: string }
     [Main.PCO_PUSHER_AUTH]: { socketId: string; channelName: string; serviceTypeId: string }
     [Main.PCO_FETCH_SERVICE_TREE]: undefined
@@ -398,6 +400,7 @@ export interface MainReturnPayloads {
     [Main.CHURCHTOOLS_TEST]: Promise<{ success: boolean; message: string }>;
     [Main.CHURCHTOOLS_EVENTS]: Promise<any[]>;
     [Main.CHURCHTOOLS_AGENDA]: Promise<{ event: any; items: any[] }>
+    [Main.CHURCHTOOLS_IMPORT]: Promise<{ success: boolean; matched: number; created: number; projectName: string }>
     [Main.PCO_FETCH_SERVICE_TREE]: Promise<PCOFolderTreeNode[]>
     [Main.PCO_LIVE_GET]: Promise<{ liveId: string | null; liveChannel: string | null; orgId: string | null; liveStartAt: string | null; liveEndAt: string | null; length: number | null; isPreService: boolean; serviceStartAt: string | null; serviceEndAt: string | null } | null>
     [Main.PCO_PUSHER_AUTH]: Promise<{ auth: string; channel_data?: string } | null>
