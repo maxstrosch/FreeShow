@@ -16,7 +16,7 @@
     let busy = false
 
     onMount(async () => {
-        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "contentProviders.churchTools" })
+        const saved = await requestMain(Main.GET_STORE_VALUE, { file: "ACCESS", key: "churchTools" })
         if (saved) {
             baseUrl = saved.baseUrl || ""
             token = saved.token || ""
@@ -54,7 +54,7 @@
         busy = false
     }
 
-    async function loadAgenda() {
+    async function importAgenda() {\n        busy = true\n        status = ""\n        try {\n            const result = await requestMain(Main.CHURCHTOOLS_IMPORT, { baseUrl, token, eventId })\n            status = `Projekt „${result.projectName}“ erstellt: ${result.matched} Lieder automatisch zugeordnet, ${result.created} Platzhalter für nicht gefundene Lieder angelegt.`\n        } catch (error: any) {\n            status = error?.message || "Projekt konnte nicht erstellt werden."\n        }\n        busy = false\n    }\n\n    async function loadAgenda() {
         busy = true
         status = ""
         try {
@@ -106,7 +106,7 @@
 {/if}
 
 {#if agenda.length}
-    <Title label="Ablaufplan-Vorschau" icon="list" />
+    <Title label="Ablaufplan-Vorschau" icon="list" />\n    <InputRow>\n        <MaterialButton on:click={importAgenda} disabled={busy || !eventId || !agenda.length}>Als FreeShow-Projekt übernehmen</MaterialButton>\n    </InputRow>
     {#each agenda as item}
         <InputRow>
             <div style="flex:1;">
