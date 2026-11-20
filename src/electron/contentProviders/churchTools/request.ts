@@ -130,7 +130,7 @@ export async function churchToolsImportAgenda(baseUrl: string, token: string, ev
             continue
         }
 
-        const text = [title, item.note].filter(Boolean).join("\\n")
+        const text = [title, item.note].filter(Boolean).join("\n")
         const placeholder = makePlaceholderSong(title || "Programmpunkt", String(item.id), note)
         if (kind === "text" && text) {
             const slideId = Object.keys(placeholder.slides)[0]
